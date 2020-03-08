@@ -21,6 +21,18 @@ prompt1 = 'Enter the x,y GOAL node location (e.g. [181,94]), relative to bottom 
 goal_node = input(prompt1);
 fprintf('\n');
 
+% Solicit robot radius from user
+fprintf('\n');
+prompt2 = 'Enter robot radius (unit length): ';
+r = input(prompt2);
+fprintf('\n');
+
+% Solicit obstacle clearance from user
+fprintf('\n');
+prompt3 = 'Enter obstacle clearance (unit length): ';
+c = input(prompt3);
+fprintf('\n');
+
 xmax=300; ymax=200;
 fig=figure; hold on; axis equal;
 % Define black border around action movement area
@@ -65,8 +77,8 @@ h5=plot(xunit, yunit,'Color','blue');
 
 Obstacles=[h1 h2 h3 h4 h5];
 
-startInObstacle = obstacleCheckPoint(Obstacles,start_node);
-goalInObstacle = obstacleCheckPoint(Obstacles,goal_node);
+startInObstacle = obstacleCheckRigid(Obstacles,start_node,r,c);
+goalInObstacle = obstacleCheckRigid(Obstacles,goal_node,r,c);
 
 if startInObstacle==1
     outside_obs_start=1;
@@ -77,7 +89,7 @@ if startInObstacle==1
         fprintf('\n');
         prompt = 'Enter new x,y STARTING node location (e.g. [0,0]), relative to bottom left corner of action space: ';
         start_node = input(prompt);
-        outside_obs_start = obstacleCheckPoint(Obstacles,start_node);
+        outside_obs_start = obstacleCheckRigid(Obstacles,start_node,r,c);
     end
 end
 
@@ -90,13 +102,14 @@ if goalInObstacle==1
         fprintf('\n');
         prompt = 'Enter new x,y GOAL node location (e.g. [0,0]), relative to bottom left corner of action space: ';
         goal_node = input(prompt);
-        outside_obs_goal = obstacleCheckPoint(Obstacles,goal_node);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,goal_node,r,c);
     end
 end
 
 % Start program run timer
 tic
 
+% Plot start and end point
 plot(start_node(1), start_node(2),'mo','MarkerFaceColor','m');
 plot(goal_node(1), goal_node(2),'m^','MarkerFaceColor','m');
 drawnow
@@ -134,7 +147,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -159,7 +172,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -186,7 +199,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -215,7 +228,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -240,7 +253,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else        
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -267,7 +280,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -296,7 +309,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -321,7 +334,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -348,7 +361,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -376,7 +389,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -401,7 +414,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -428,7 +441,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -456,7 +469,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -481,7 +494,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -506,7 +519,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -533,7 +546,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -561,7 +574,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -590,7 +603,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -615,7 +628,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -640,7 +653,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -667,7 +680,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -695,7 +708,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -723,7 +736,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -748,7 +761,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -773,7 +786,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -800,7 +813,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -828,7 +841,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -856,7 +869,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -881,7 +894,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -906,7 +919,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -933,7 +946,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -961,7 +974,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -990,7 +1003,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -1015,7 +1028,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -1040,7 +1053,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -1065,7 +1078,7 @@ while goal_node_explored==0
          
         if sum(and(x_mask,y_mask))>=1
         else
-        outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+        outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
         if outside_obs_goal==0
             lowest_cost_path_used=1;
             ParentIdx=ParentIdx+1;
@@ -1092,7 +1105,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -1120,7 +1133,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -1148,7 +1161,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -1176,7 +1189,7 @@ while goal_node_explored==0
             if sum(and(x_mask,y_mask))>=1
             else
 
-            outside_obs_goal = obstacleCheckPoint(Obstacles,[x,y]);
+            outside_obs_goal = obstacleCheckRigid(Obstacles,[x,y],r,c);
             if outside_obs_goal==0
                 ParentIdx=ParentIdx+1;
                 Nodes(ParentIdx).x=x;
@@ -1201,6 +1214,7 @@ while goal_node_explored==0
     i=i+1;
     %
 end
+
 
 IDs=cell2mat({Nodes.ID});
 PAR_IDs=cell2mat({Nodes.ParentID});
